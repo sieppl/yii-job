@@ -1,7 +1,12 @@
 yii-job
 =======
 
-Installing
+Database Installing
+----------
+
+Import data/mysql.sql into your database.
+
+Yii Installing
 ----------
 
 In your config add the module:
