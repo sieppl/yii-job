@@ -1,8 +1,8 @@
 <?php
 
-Yii::import('application.modules.job.models._base.*');
-Yii::import('application.modules.job.models.*');
-Yii::import('application.modules.job.vendors.crontab.*');
+Yii::import('application.modules.yii-job.models._base.*');
+Yii::import('application.modules.yii-job.models.*');
+Yii::import('application.modules.yii-job.vendors.crontab.*');
 
 class Job extends BaseJob
 {

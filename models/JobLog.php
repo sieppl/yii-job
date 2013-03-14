@@ -1,6 +1,6 @@
 <?php
 
-Yii::import('application.modules.job.models._base.BaseJobLog');
+Yii::import('application.modules.yii-job.models._base.BaseJobLog');
 
 class JobLog extends BaseJobLog
 {
