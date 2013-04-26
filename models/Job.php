@@ -164,6 +164,13 @@ class Job extends BaseJob
 		{
 			Yii::log('Saving a job log failed: '.print_r($log->errors), 'error');
 		}
+		else 
+		{
+			if ($log->job_status_id == JobStatus::EXCEPTION || $log->job_status_id == JobStatus::ERROR)
+			{
+				Yii::log("Running job {$log->job_class} resulted in an exception or error. Please see log ID {$log->id} for details", 'error');
+			}
+		}
 	}
 	
 	public function afterExecute()

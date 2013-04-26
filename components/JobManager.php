@@ -129,6 +129,7 @@ class JobManager extends CApplicationComponent
 			}
 			elseif ($model->job_status_id == JobStatus::RUNNING)
 			{
+				$ids[] = $model->id;
 				//do not sync a job which is currently running, we do not want to break it
 				continue;	
 			}
