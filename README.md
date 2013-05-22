@@ -70,3 +70,7 @@ yiic job
 ```
 
 This is the index command which will sync your jobs in the config with your database and run all jobs that are due.
+
+Thanks
+----------
+Thanks to mtdowling for providing a nice php crontab parser: https://github.com/mtdowling/cron-expression
