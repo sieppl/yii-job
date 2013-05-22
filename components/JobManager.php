@@ -60,6 +60,16 @@ class JobManager extends CApplicationComponent
 		return $this->saveJob($job);
 	}
 	
+	protected function timestampToDatabaseDate($timestamp = null)
+	{
+		if ($timestamp === null)
+		{
+			$timestamp = time();
+		}
+	
+		return date("Y-m-d G:i:s", $timestamp);
+	}	
+	
 	/**
 	 * 
 	 * @param Job $job
@@ -85,7 +95,7 @@ class JobManager extends CApplicationComponent
 	 */
 	public function removeHangingJobs()
 	{
-		$startTime = date("Y-m-d G:i:s", strtotime("- {$this->removeHangingJobsThreshold} seconds")); 
+		$startTime = $this->timestampToDatabaseDate(strtotime("- {$this->removeHangingJobsThreshold} seconds")); 
 
 		Yii::trace("checking for jobs started before $startTime");
 		
@@ -157,11 +167,13 @@ class JobManager extends CApplicationComponent
 	
 	public function runJobs()
 	{
+		Yii::trace("Run Jobs");
+		$now = $this->timestampToDatabaseDate();
 		$job = Job::model()->find(array(
-				 'condition' => 'planned_time < NOW() AND job_status_id=:job_status_id',
+				 'condition' => 'planned_time <= :planned_time AND job_status_id=:job_status_id',
 				 'order' => 'planned_time ASC',
 				 'limit' => 1,
-				 'params' => array(':job_status_id' => JobStatus::ENQUEUED)
+				 'params' => array(':planned_time' => $now, ':job_status_id' => JobStatus::ENQUEUED)
 				));
 
 		if ($job)

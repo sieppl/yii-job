@@ -33,7 +33,7 @@ class Job extends BaseJob
 		}
 	}
 	
-	protected function timestampToDatebaseDate($timestamp = null)
+	protected function timestampToDatabaseDate($timestamp = null)
 	{
 		if ($timestamp === null)
 		{
@@ -48,7 +48,7 @@ class Job extends BaseJob
 		if ($this->crontab)
 		{
 			$cron = CronExpression::factory($this->crontab);
-			$this->planned_time = $cron->getNextRunDate()->format('Y-m-d H:i:s');
+			$this->planned_time = $this->timestampToDatabaseDate($cron->getNextRunDate()->getTimestamp());
 		}		
 	}
 	
@@ -58,7 +58,7 @@ class Job extends BaseJob
 		{
 			$this->calculateNextPlannedTime();
 			if ($this->planned_time === null)
-				$this->planned_time = $this->timestampToDatebaseDate();
+				$this->planned_time = $this->timestampToDatabaseDate();
 		}
 		
 		return parent::beforeValidate();
@@ -66,7 +66,7 @@ class Job extends BaseJob
 	
 	public function beforeSave()
 	{
-		$this->update_time = $this->timestampToDatebaseDate();
+		$this->update_time = $this->timestampToDatabaseDate();
 		if (!$this->create_time)
 		{
 			$this->create_time = $this->update_time;
@@ -107,7 +107,7 @@ class Job extends BaseJob
 	
 	public function beforeExecute()
 	{
-		$this->start_time = $this->timestampToDatebaseDate();
+		$this->start_time = $this->timestampToDatabaseDate();
 		$this->job_status_id = JobStatus::RUNNING;
 		$this->save();			
 	}
@@ -157,9 +157,9 @@ class Job extends BaseJob
 		$log->job_class = $this->job_class;
 		$log->start_time = $this->start_time;
 		$log->job_status_id = $this->job_status_id;
-		$log->finish_time = $this->timestampToDatebaseDate();
+		$log->finish_time = $this->timestampToDatabaseDate();
 		$log->finish_message = json_encode($this->getFinishMessage());
-		$log->create_time = $this->timestampToDatebaseDate();
+		$log->create_time = $this->timestampToDatabaseDate();
 		if (!$log->save())
 		{
 			Yii::log('Saving a job log failed: '.print_r($log->errors), 'error');
