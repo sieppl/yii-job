@@ -17,9 +17,18 @@
  * @property string $finish_message
  * @property string $create_time
  * @property string $update_time
+ * @property string $queue
+ * @property integer $progress
+ * @property string $job_data
+ * @property integer $job_id
+ * @property string $token
+ * @property string $identifier1
+ * @property string $identifier2
+ * @property string $identifier3
+ * @property string $identifier4
  *
  */
-abstract class BaseJobLog extends CActiveRecord {
+abstract class BaseJobLog extends TgActiveRecord {
 
     public static function model($className=__CLASS__) {
         return parent::model($className);
@@ -40,11 +49,13 @@ abstract class BaseJobLog extends CActiveRecord {
     public function rules() {
         return array(
             array('job_class, start_time, finish_time, job_status_id', 'required'),
-            array('job_status_id', 'numerical', 'integerOnly'=>true),
-            array('job_class', 'length', 'max'=>64),
-            array('finish_message, create_time, update_time', 'safe'),
-            array('finish_message, create_time, update_time', 'default', 'setOnEmpty' => true, 'value' => null),
-            array('id, job_class, start_time, finish_time, job_status_id, finish_message, create_time, update_time', 'safe', 'on'=>'search'),
+            array('job_status_id, progress, job_id', 'numerical', 'integerOnly'=>true),
+            array('job_class, identifier1, identifier2, identifier3, identifier4', 'length', 'max'=>64),
+            array('queue', 'length', 'max'=>45),
+            array('token', 'length', 'max'=>23),
+            array('finish_message, create_time, update_time, job_data', 'safe'),
+            array('finish_message, create_time, update_time, queue, progress, job_data, job_id, token, identifier1, identifier2, identifier3, identifier4', 'default', 'setOnEmpty' => true, 'value' => null),
+            array('id, job_class, start_time, finish_time, job_status_id, finish_message, create_time, update_time, queue, progress, job_data, job_id, token, identifier1, identifier2, identifier3, identifier4', 'safe', 'on'=>'search'),
         );
     }
 
@@ -68,6 +79,15 @@ abstract class BaseJobLog extends CActiveRecord {
             'finish_message' => Yii::t('app', 'Finish Message'),
             'create_time' => Yii::t('app', 'Create Time'),
             'update_time' => Yii::t('app', 'Update Time'),
+            'queue' => Yii::t('app', 'Queue'),
+            'progress' => Yii::t('app', 'Progress'),
+            'job_data' => Yii::t('app', 'Job Data'),
+            'job_id' => Yii::t('app', 'Job'),
+            'token' => Yii::t('app', 'Token'),
+            'identifier1' => Yii::t('app', 'Identifier1'),
+            'identifier2' => Yii::t('app', 'Identifier2'),
+            'identifier3' => Yii::t('app', 'Identifier3'),
+            'identifier4' => Yii::t('app', 'Identifier4'),
         );
     }
 
@@ -82,6 +102,15 @@ abstract class BaseJobLog extends CActiveRecord {
         $criteria->compare('finish_message', $this->finish_message, true);
         $criteria->compare('create_time', $this->create_time, true);
         $criteria->compare('update_time', $this->update_time, true);
+        $criteria->compare('queue', $this->queue, true);
+        $criteria->compare('progress', $this->progress);
+        $criteria->compare('job_data', $this->job_data, true);
+        $criteria->compare('job_id', $this->job_id);
+        $criteria->compare('token', $this->token, true);
+        $criteria->compare('identifier1', $this->identifier1, true);
+        $criteria->compare('identifier2', $this->identifier2, true);
+        $criteria->compare('identifier3', $this->identifier3, true);
+        $criteria->compare('identifier4', $this->identifier4, true);
 
         return new CActiveDataProvider($this, array(
             'criteria' => $criteria,

@@ -10,85 +10,111 @@
  * and there are no model relations.
  *
  * @property string $id
+ * @property string $token
  * @property string $job_class
  * @property string $job_data
  * @property string $crontab
  * @property string $planned_time
  * @property string $start_time
  * @property integer $job_status_id
+ * @property integer $job_origin_id
  * @property string $create_time
  * @property string $update_time
+ * @property string $queue
+ * @property integer $progress
+ * @property string $identifier1
+ * @property string $identifier2
+ * @property string $identifier3
+ * @property string $identifier4
  *
  */
-abstract class BaseJob extends CActiveRecord {
+abstract class BaseJob extends TgActiveRecord {
 
-	public static function model($className=__CLASS__) {
-		return parent::model($className);
-	}
+    public static function model($className=__CLASS__) {
+        return parent::model($className);
+    }
 
-	public function tableName() {
-		return 'job';
-	}
+    public function tableName() {
+        return 'job';
+    }
 
-	public static function label($n = 1) {
-		return Yii::t('app', 'Job|Jobs', $n);
-	}
+    public static function label($n = 1) {
+        return Yii::t('app', 'Job|Jobs', $n);
+    }
 
-	public static function representingColumn() {
-		return 'job_class';
-	}
+    public static function representingColumn() {
+        return 'token';
+    }
 
-	public function rules() {
-		return array(
-			array('job_class, planned_time, job_status_id', 'required'),
-			array('job_status_id', 'numerical', 'integerOnly'=>true),
-			array('job_class', 'length', 'max'=>64),
-			array('crontab', 'length', 'max'=>128),
-			array('job_data, start_time, create_time, update_time', 'safe'),
-			array('job_data, crontab, start_time, create_time, update_time', 'default', 'setOnEmpty' => true, 'value' => null),
-			array('id, job_class, job_data, crontab, planned_time, start_time, job_status_id, create_time, update_time', 'safe', 'on'=>'search'),
-		);
-	}
+    public function rules() {
+        return array(
+            array('token, job_class, job_status_id, job_origin_id', 'required'),
+            array('job_status_id, job_origin_id, progress', 'numerical', 'integerOnly'=>true),
+            array('token', 'length', 'max'=>23),
+            array('job_class, identifier1, identifier2, identifier3, identifier4', 'length', 'max'=>64),
+            array('crontab', 'length', 'max'=>128),
+            array('queue', 'length', 'max'=>45),
+            array('job_data, planned_time, start_time, create_time, update_time', 'safe'),
+            array('job_data, crontab, planned_time, start_time, create_time, update_time, queue, progress, identifier1, identifier2, identifier3, identifier4', 'default', 'setOnEmpty' => true, 'value' => null),
+            array('id, token, job_class, job_data, crontab, planned_time, start_time, job_status_id, job_origin_id, create_time, update_time, queue, progress, identifier1, identifier2, identifier3, identifier4', 'safe', 'on'=>'search'),
+        );
+    }
 
-	public function relations() {
-		return array(
-		);
-	}
+    public function relations() {
+        return array(
+        );
+    }
 
-	public function pivotModels() {
-		return array(
-		);
-	}
+    public function pivotModels() {
+        return array(
+        );
+    }
 
-	public function attributeLabels() {
-		return array(
-			'id' => Yii::t('app', 'ID'),
-			'job_class' => Yii::t('app', 'Job Class'),
-			'job_data' => Yii::t('app', 'Job Data'),
-			'crontab' => Yii::t('app', 'Crontab'),
-			'planned_time' => Yii::t('app', 'Planned Time'),
-			'start_time' => Yii::t('app', 'Start Time'),
-			'job_status_id' => Yii::t('app', 'Job Status'),
-			'create_time' => Yii::t('app', 'Create Time'),
-			'update_time' => Yii::t('app', 'Update Time'),
-		);
-	}
+    public function attributeLabels() {
+        return array(
+            'id' => Yii::t('app', 'ID'),
+            'token' => Yii::t('app', 'Token'),
+            'job_class' => Yii::t('app', 'Job Class'),
+            'job_data' => Yii::t('app', 'Job Data'),
+            'crontab' => Yii::t('app', 'Crontab'),
+            'planned_time' => Yii::t('app', 'Planned Time'),
+            'start_time' => Yii::t('app', 'Start Time'),
+            'job_status_id' => Yii::t('app', 'Job Status'),
+            'job_origin_id' => Yii::t('app', 'Job Origin'),
+            'create_time' => Yii::t('app', 'Create Time'),
+            'update_time' => Yii::t('app', 'Update Time'),
+            'queue' => Yii::t('app', 'Queue'),
+            'progress' => Yii::t('app', 'Progress'),
+            'identifier1' => Yii::t('app', 'Identifier1'),
+            'identifier2' => Yii::t('app', 'Identifier2'),
+            'identifier3' => Yii::t('app', 'Identifier3'),
+            'identifier4' => Yii::t('app', 'Identifier4'),
+        );
+    }
 
-	public function search() {
-		$criteria = new CDbCriteria;
+    public function search() {
+        $criteria = new CDbCriteria;
 
-		$criteria->compare('id', $this->id, true);
-		$criteria->compare('job_class', $this->job_class, true);
-		$criteria->compare('job_data', $this->job_data, true);
-		$criteria->compare('crontab', $this->crontab, true);
-		$criteria->compare('planned_time', $this->planned_time, true);
-		$criteria->compare('start_time', $this->start_time, true);
-		$criteria->compare('job_status_id', $this->job_status_id);
-		$criteria->compare('create_time', $this->create_time, true);
-		$criteria->compare('update_time', $this->update_time, true);
+        $criteria->compare('id', $this->id, true);
+        $criteria->compare('token', $this->token, true);
+        $criteria->compare('job_class', $this->job_class, true);
+        $criteria->compare('job_data', $this->job_data, true);
+        $criteria->compare('crontab', $this->crontab, true);
+        $criteria->compare('planned_time', $this->planned_time, true);
+        $criteria->compare('start_time', $this->start_time, true);
+        $criteria->compare('job_status_id', $this->job_status_id);
+        $criteria->compare('job_origin_id', $this->job_origin_id);
+        $criteria->compare('create_time', $this->create_time, true);
+        $criteria->compare('update_time', $this->update_time, true);
+        $criteria->compare('queue', $this->queue, true);
+        $criteria->compare('progress', $this->progress);
+        $criteria->compare('identifier1', $this->identifier1, true);
+        $criteria->compare('identifier2', $this->identifier2, true);
+        $criteria->compare('identifier3', $this->identifier3, true);
+        $criteria->compare('identifier4', $this->identifier4, true);
 
-		return new CActiveDataProvider($this, array(
-			'criteria' => $criteria,
-		));
-	}
+        return new CActiveDataProvider($this, array(
+            'criteria' => $criteria,
+        ));
+    }
 }

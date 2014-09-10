@@ -2,19 +2,26 @@
 -- Tabellenstruktur für Tabelle `job`
 --
 
-DROP TABLE IF EXISTS `job`;
-CREATE TABLE IF NOT EXISTS `job` (
+CREATE TABLE `job` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `token` varchar(23) NOT NULL,
   `job_class` varchar(64) NOT NULL,
   `job_data` text,
   `crontab` varchar(128) DEFAULT NULL,
-  `planned_time` datetime NOT NULL,
+  `planned_time` datetime DEFAULT NULL,
   `start_time` datetime DEFAULT NULL,
   `job_status_id` int(11) NOT NULL,
+  `job_origin_id` int(11) NOT NULL,
   `create_time` datetime DEFAULT NULL,
   `update_time` datetime DEFAULT NULL,
+  `queue` varchar(45) DEFAULT NULL,
+  `progress` int(11) DEFAULT NULL,
+  `identifier1` varchar(64) DEFAULT NULL,
+  `identifier2` varchar(64) DEFAULT NULL,
+  `identifier3` varchar(64) DEFAULT NULL,
+  `identifier4` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -22,9 +29,8 @@ CREATE TABLE IF NOT EXISTS `job` (
 -- Tabellenstruktur für Tabelle `job_log`
 --
 
-DROP TABLE IF EXISTS `job_log`;
-CREATE TABLE IF NOT EXISTS `job_log` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+CREATE TABLE `job_log` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `job_class` varchar(64) NOT NULL,
   `start_time` datetime NOT NULL,
   `finish_time` datetime NOT NULL,
@@ -32,5 +38,14 @@ CREATE TABLE IF NOT EXISTS `job_log` (
   `finish_message` text,
   `create_time` datetime DEFAULT NULL,
   `update_time` datetime DEFAULT NULL,
+  `queue` varchar(45) DEFAULT NULL,
+  `progress` int(11) DEFAULT NULL,
+  `job_data` text,
+  `job_id` int(11) DEFAULT NULL,
+  `token` varchar(23) DEFAULT NULL,
+  `identifier1` varchar(64) DEFAULT NULL,
+  `identifier2` varchar(64) DEFAULT NULL,
+  `identifier3` varchar(64) DEFAULT NULL,
+  `identifier4` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;

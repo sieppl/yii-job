@@ -12,15 +12,15 @@ class JobCommand extends CConsoleCommand
 		Yii::app()->jobManager->syncJobs();
 	}
 	
-	public function actionRunJobs()
+	public function actionRunJobs($queue = null)
 	{
-		Yii::app()->jobManager->runJobs();
+		Yii::app()->jobManager->runJobs($queue);
 	}
 	
-	public function actionIndex()
+	public function actionIndex($queue = null)
 	{
 		Yii::app()->jobManager->removeHangingJobs();
 		Yii::app()->jobManager->syncJobs();
-		Yii::app()->jobManager->runJobs(); 
+		Yii::app()->jobManager->runJobs($queue); 
 	}
 }
